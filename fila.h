@@ -13,10 +13,10 @@ typedef struct {
     Celula* ultimo;
 } Fila;
 
-int iniciaFila ( Fila *) ;
-int FilaEhVazia ( Fila *) ;
-int FilaEnfileira ( Fila *, int ); /* insere no final */
-int FilaDesenfileira ( Fila *, int *) ; /* retira do iní cio */
-void FilaLibera ( Fila *) ;
+int iniciaFila (Fila *) ;
+int FilaEhVazia (Fila *) ;
+void FilaEnfileira (Fila *, Posicao ); /* insere no final */
+int FilaDesenfileira (Fila *, Posicao* ) ; /* retira do iní cio */
+void FilaLibera (Fila *) ;
 
 #endif // fila.h
