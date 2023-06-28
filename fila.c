@@ -33,8 +33,7 @@ int FilaDesenfileira ( Fila *pfila ,Posicao *pos) {
 }
 
 void FilaLibera ( Fila *pfila) {
-    /* Considere que a fila foi declarada estaticamente na main */
-    Posicao t ;
+    Posicao t;
     while ( FilaDesenfileira (pfila, &t)) ;
     free ( pfila->cabeca );
 }
