@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "pilha.h"
 #include "labirinto.h"
 
 Labirinto* alocaLab(int L, int C){
