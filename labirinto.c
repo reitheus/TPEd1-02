@@ -313,6 +313,33 @@ int achaSaidaPilha(Labirinto* pLab, Posicao *saida, Posicao *mause, Percurso *pT
 }
 
 
+//escolhe qal função achaSaida ira ser chamada
+int escolheSaida(Labirinto* pLab, Posicao *saida, Posicao *mause, Percurso *pTra, int i, Posicao *inicio, int achou){
+    int valida;
+
+    switch(pLab->op){
+
+        case 'r':
+            printf("\nachou saida utilizando recursão\n");
+            valida = achaSaida(pLab, saida, mause,pTra,0, inicio, achou);
+            break;
+        case 'p':
+            printf("\nachou saida utilizando Pilha\n");
+            valida = achaSaidaPilha(pLab, saida, mause,pTra,0, achou);
+            break;
+        case  'f':
+            printf("acha saida por fila");
+            break;
+        default:
+            printf("\nopção invalida\n");
+            break;
+
+    }
+    return valida;
+}
+
+
+
 Labirinto* imprimepercursoNolabirinto(Labirinto *plab,Percurso *pTra){
     //impressão da saida de acordo com a opção de entrada
     
