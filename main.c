@@ -25,7 +25,7 @@ int main(){
     updatePos(inicio, valueY(mause), valueX(mause));  
     updatePos( saida, pLab->tamL - 2, pLab->tamC - 2);
     pTra = alocaPer(pLab->v);
-    valida = achaSaida(pLab, saida, mause,pTra,0, inicio, achou);
+    valida = escolheSaida(pLab, saida, mause,pTra,0, inicio, achou);
     
     //impressão da saida
     if(valida == 1){
