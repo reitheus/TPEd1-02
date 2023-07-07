@@ -1,39 +1,65 @@
 #include "fila.h"
-#include "posicao.h"
 
-int inciaFila(Fila *pFila){
-    pFila->cabeca = (Celula*) malloc (sizeof(Celula));
-    if (pFila->cabeca == NULL) return 0;
-    pFila->ultimo = pFila->cabeca;
-    return 1;
+#include <stdio.h>
+#include <stdlib.h>
+
+void iniciaFila(Fila *pFila){
+    pFila=(Fila*)malloc(sizeof(Fila));
+    pFila->cabeca = NULL;
+    pFila->ultimo = NULL;
+    printf("fila iniciada\n");
 
 }
 
 int FilaEhVazia(Fila *pfila){
-    return pfila->cabeca == pfila->ultimo;
+    if(pfila->cabeca == pfila->ultimo){
+        return 1;
+    }else{
+        return 0;
+    }
+    
 }
 
-void FilaEnfileira ( Fila *pfila , Posicao pos) {
+void insereFila ( Fila *pfila ,Iten pitem) {
     Celula * aux = ( Celula *) malloc ( sizeof ( Celula ) );
-    aux->pos = pos;
+    if (aux == NULL) {
+        printf("Erro: Memória insuficiente.\n");
+        exit(1);
+    }
+    aux->iten=pitem;
     aux->prox = NULL ;
-    pfila->ultimo->prox = aux ;
+
+    if (pfila->ultimo == NULL) {
+        pfila->cabeca = aux;
+    } else {
+        pfila->ultimo->prox = aux;
+    }
     pfila->ultimo = aux;
 }
 
-int FilaDesenfileira ( Fila *pfila ,Posicao *pos) {
-    if ( FilaEhVazia (pfila))
+int FilaDesenfileira ( Fila *pfila ,Iten *pitem) {
+    if (FilaEhVazia(pfila)) {
         return 0;
-    Celula * aux = pfila->cabeca->prox;
-    pfila->cabeca->prox = pfila->cabeca->prox->prox;
-    *pos = aux->pos;
-    
-    free ( aux );
-    return 1;
+    }else{
+
+        Celula* aux = pfila->cabeca;
+        *pitem = aux->iten;
+
+        pfila->cabeca = pfila->cabeca->prox;
+
+        if (pfila->cabeca == NULL) {
+            pfila->ultimo = NULL;
+        }
+
+        free(aux);
+
+        return 1;
+    }
+
 }
 
 void FilaLibera ( Fila *pfila) {
-    Posicao t;
+    Iten t;
     while ( FilaDesenfileira (pfila, &t)) ;
     free ( pfila->cabeca );
 }
