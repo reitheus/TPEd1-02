@@ -3,7 +3,7 @@
 
 #include "posicao.h"
 
-typedef struct {
+typedef struct percuso{
     Posicao *trajetos;
     Posicao *mCaminho;
     int mcom;

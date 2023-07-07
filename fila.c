@@ -3,16 +3,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void iniciaFila(Fila *pFila){
-    pFila=(Fila*)malloc(sizeof(Fila));
-    pFila->cabeca = NULL;
+Fila* iniciaFila(void){
+    Fila *pFila = (Fila*)malloc(sizeof(Fila));
     pFila->ultimo = NULL;
-    printf("fila iniciada\n");
+    pFila->cabeca = NULL;
+    pFila->tam = 0;
+    printf("\nfila iniciada\n");
+    return pFila;
 
 }
 
 int FilaEhVazia(Fila *pfila){
-    if(pfila->cabeca == pfila->ultimo){
+    if(pfila->cabeca == NULL){
         return 1;
     }else{
         return 0;
@@ -20,46 +22,57 @@ int FilaEhVazia(Fila *pfila){
     
 }
 
-void insereFila ( Fila *pfila ,Iten pitem) {
-    Celula * aux = ( Celula *) malloc ( sizeof ( Celula ) );
+void insereFila ( Fila *pfila ,Iten *pitem) {
+    Celula *aux = (Celula*) malloc (sizeof(Celula));
     if (aux == NULL) {
         printf("Erro: Memória insuficiente.\n");
         exit(1);
-    }
-    aux->iten=pitem;
-    aux->prox = NULL ;
-
-    if (pfila->ultimo == NULL) {
-        pfila->cabeca = aux;
-    } else {
-        pfila->ultimo->prox = aux;
-    }
-    pfila->ultimo = aux;
-}
-
-int FilaDesenfileira ( Fila *pfila ,Iten *pitem) {
-    if (FilaEhVazia(pfila)) {
-        return 0;
     }else{
-
-        Celula* aux = pfila->cabeca;
-        *pitem = aux->iten;
-
-        pfila->cabeca = pfila->cabeca->prox;
+        aux->iten = *pitem;
+        aux->prox = NULL ;
+        printf("inseriu\n");
 
         if (pfila->cabeca == NULL) {
-            pfila->ultimo = NULL;
+            pfila->cabeca = aux;
+            pfila->ultimo = aux;
+            
+        } else {
+            pfila->ultimo->prox = aux;
+            pfila->ultimo = aux;
         }
-
-        free(aux);
-
-        return 1;
+        pfila->tam++;
+        pfila->ultimo = aux;
     }
+}
+
+Iten FilaDesenfileira ( Fila *pfila, Iten *pitem) {
+    
+    if (FilaEhVazia(pfila)) {
+        exit(1);
+    }
+    
+    Celula *aux = pfila->cabeca;
+    *pitem = aux->iten;
+    pfila->cabeca = aux->prox;
+
+    if (pfila->cabeca == NULL) {
+        pfila->ultimo = NULL;
+    }
+
+    free(aux);
+    printf("desenfilerou,%d - %d\n",pitem->atual.y,pitem->atual.x);
+    return *pitem;
+    
 
 }
 
 void FilaLibera ( Fila *pfila) {
-    Iten t;
-    while ( FilaDesenfileira (pfila, &t)) ;
-    free ( pfila->cabeca );
+    Celula *t;
+    Celula *q = pfila->cabeca;
+    while ( q != NULL){
+        t = q->prox;
+        free(q);
+        q=t;
+    }
+    free (pfila);
 }

@@ -2,7 +2,7 @@
 #define POSICAO_H
 
 
-typedef struct{
+typedef struct posicao{
     int x;
     int y;
 }Posicao;

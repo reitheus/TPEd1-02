@@ -13,15 +13,16 @@ typedef struct cel{
     struct cel *prox;
 } Celula;
 
-typedef struct {
+typedef struct fila{
     Celula* cabeca;
     Celula* ultimo;
+    int tam;
 } Fila;
 
-void iniciaFila (Fila *) ;
+Fila* iniciaFila (void ) ;
 int FilaEhVazia (Fila *) ;
-void insereFila (Fila *, Iten ); /* insere no final */
-int FilaDesenfileira (Fila* , Iten* ) ; /* retira do iní cio */
+void insereFila (Fila *, Iten* ); /* insere no final */
+Iten FilaDesenfileira (Fila* ,Iten* ) ; /* retira do iní cio */
 void FilaLibera (Fila *) ;
 
 #endif // fila.h
