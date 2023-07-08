@@ -8,7 +8,6 @@ Fila* iniciaFila(void){
     pFila->ultimo = NULL;
     pFila->cabeca = NULL;
     pFila->tam = 0;
-    printf("\nfila iniciada\n");
     return pFila;
 
 }
@@ -30,7 +29,6 @@ void insereFila ( Fila *pfila ,Iten *pitem) {
     }else{
         aux->iten = *pitem;
         aux->prox = NULL ;
-        printf("inseriu\n");
 
         if (pfila->cabeca == NULL) {
             pfila->cabeca = aux;
@@ -60,7 +58,6 @@ Iten FilaDesenfileira ( Fila *pfila, Iten *pitem) {
     }
 
     free(aux);
-    printf("desenfilerou,%d - %d\n",pitem->atual.y,pitem->atual.x);
     return *pitem;
     
 

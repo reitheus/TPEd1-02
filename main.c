@@ -25,11 +25,11 @@ int main(){
     updatePos(inicio, valueY(mause), valueX(mause));  
     updatePos( saida, pLab->tamL - 2, pLab->tamC - 2);
     pTra = alocaPer(pLab->v);
-    valida = escolheSaida(pLab, saida, mause,pTra,0, inicio, achou);
+    valida = escolheSaida(pLab, saida, mause,pTra, inicio, achou);
     
     //impressão da saida
     if(valida == 1){
-        pLab = imprimepercursoNolabirinto(pLab,pTra);
+        pLab = imprimepercursoNolabirinto(pLab,pTra,inicio,saida);
         if(pLab->op=='c' || pLab->op=='C'){
             printf("%d, %d\n",saida->y,saida->x);
         }
