@@ -141,7 +141,6 @@ int achaSaida(Labirinto* pLab, Posicao *saida, Posicao *mause, Percurso *pTra, i
 
     if (valueY(mause) == valueY(saida) && valueX(mause) == valueX(saida)){
         
-        updateTra(pTra,i + 1 ,valueX(mause),valueY(mause));
         if(i < pTra->mcom){
             pTra->mcom = i;
             for(int j=0;j <= pTra->mcom;j++){
@@ -274,8 +273,9 @@ int achaSaidaPilha(Labirinto* pLab, Posicao *saida, Posicao *mause, Percurso *pT
         if(mause->x == saida->x && mause->y == saida->y){
             //printf("\nachou a saida\n");
             achou = 1;
+            break;
             
-            }
+        }
         else if(PilhaEhVazia(pPilha) && achou == 0){
             printf("\nultimo %i\n",pPilha->ultimo);
             printf("\n\nnão achou saida\n\n");
@@ -289,7 +289,7 @@ int achaSaidaPilha(Labirinto* pLab, Posicao *saida, Posicao *mause, Percurso *pT
         removePilha(pPilha);
 
     }
-    printLab(pLab);
+    
     //retira os caracteres b do labirinto, o caracter b é utilizado para o rato não passa em uma posição mais de uma vez
     corrigiLab(pLab);
 
@@ -316,60 +316,78 @@ int achaSaidaFila(Labirinto *pLab, Posicao *saida, Posicao *mause, Percurso *pTr
     casa.atual.y = valueY(mause);
     casa.distancia = 0;
     updateTra(pTra,casa.distancia,valueX(&casa.atual),valueY(&casa.atual));
-    while(FilaEhVazia(pFila)){
+    insereFila(pFila,&casa);
+    while(!FilaEhVazia(pFila)){
 
+        casa = FilaDesenfileira(pFila, &casa);
+        pLab->mapa[valueY(mause)][valueX(mause)] = 'o';
+        if(casa.atual.x == saida->x && casa.atual.y == saida->y){
+
+            casa.distancia++;
+            updatePos(mause,valueY(&casa.atual),valueX(&casa.atual));
+            pLab->mapa[valueY(mause)][valueX(mause)] = 'o';
+            updateTra(pTra,casa.distancia,valueX(&casa.atual),valueY(&casa.atual));
+            achou = 1;
+            pTra->mcom = casa.distancia;
+            for (int i = 0; i <= casa.distancia; i++) {
+                pTra->mCaminho[i] = pTra->trajetos[i];
+            }
+            break;
+
+        }else{
+
+            casa.distancia++;
+            updatePos(mause,valueY(&casa.atual),valueX(&casa.atual));
+            updateTra(pTra,casa.distancia,valueX(&casa.atual),valueY(&casa.atual));
+
+            
+           
+        }
         if (valueX(mause) + 1 > 0 && valueX(mause) + 1 < pLab->tamC && pLab->mapa[valueY(mause)][valueX(mause) + 1] == ' '){
             //teste para direita
-            casa.atual.x = valueX(mause) + 1;
+            casa.atual.x++;
             insereFila(pFila, &casa);
+            casa.atual.x--;
+
             
         }
         
         if (valueY(mause) + 1 > 0 && valueY(mause) + 1 < pLab->tamL && pLab->mapa[valueY(mause) + 1][valueX(mause)] == ' '){
             //teste para baixo
-            casa.atual.y = valueY(mause) + 1;
+            casa.atual.y++;
             insereFila(pFila, &casa);
+            casa.atual.y--;
+
             
         }
 
         if (valueX(mause) - 1 > 0 && valueX(mause) - 1 < pLab->tamC && pLab->mapa[valueY(mause)][valueX(mause) - 1] == ' '){   
             //teste para esquerda
-            casa.atual.x = valueX(mause) - 1;
+            casa.atual.x--;
             insereFila(pFila, &casa);
+            casa.atual.x++;
+
             
         }
 
         if (valueY(mause) - 1 > 0 && valueY(mause) - 1 < pLab->tamL && pLab->mapa[valueY(mause) - 1][valueX(mause)] == ' '){
             //teste cima
-            casa.atual.y = valueY(mause) - 1;
+            casa.atual.y--;
             insereFila(pFila, &casa);
+            casa.atual.y++;
+
 
         }
-
-        casa = FilaDesenfileira(pFila, &casa);
         
-        if(casa.atual.x == saida->x && casa.atual.y == saida->y){
 
-            casa.distancia++;
-            updatePos(mause,casa.atual.y,casa.atual.x);
-            updateTra(pTra,casa.distancia,valueX(&casa.atual),valueY(&casa.atual));
-            achou = 1;
-            
-
-        }else{
-
-            casa.distancia++;
-            updatePos(mause,casa.atual.y,casa.atual.x);
-            updateTra(pTra,casa.distancia,valueX(&casa.atual),valueY(&casa.atual));
-        }
-
+        
         
     }
-    
-    pTra->mcom = casa.distancia;
-    for (int i = 0; i <= pTra->mcom; i++) {
+
+    for (int i = 0; i <= casa.distancia; i++) {
         pTra->mCaminho[i] = pTra->trajetos[i];
     }
+    pTra->mcom = casa.distancia;
     
     FilaLibera(pFila);
     return achou;
@@ -384,15 +402,14 @@ int escolheSaida(Labirinto* pLab, Posicao *saida, Posicao *mause, Percurso *pTra
 
         case 'r':
             printf("\nachou saida utilizando recursão\n");
-            updateTra(pTra,0,valueX(inicio),valueY(inicio));
-            valida = achaSaida(pLab, saida, mause,pTra,1, inicio, achou);
+            valida = achaSaida(pLab, saida, mause,pTra,0, inicio, achou);
             break;
         case 'p':
             printf("\nachou saida utilizando Pilha\n");
             valida = achaSaidaPilha(pLab, saida, mause,pTra,0,0);
             break;
         case  'f':
-            printf("acha saida por fila");
+            printf("\nacha saida por fila\n");
             valida = achaSaidaFila(pLab, saida, mause, pTra,0);
             break;
         default:
@@ -418,14 +435,14 @@ Labirinto* imprimepercursoNolabirinto(Labirinto *plab,Percurso *pTra, Posicao *i
         }
         plab->mapa[inicio->y][inicio->x] = 'M';
         plab->mapa[saida->y][saida->x + 1] = 'o';
-        printf("%d\n ",pTra->mcom);
+        printf("%d\n ",pTra->mcom+1);
         printLab(plab);
     }
     
     //imprime o menor caminho feito
     if(plab->op == 'c' || plab->op == 'C'){
     
-        printf("%d\n",pTra->mcom+1);
+        printf("%d\n",pTra->mcom);
         for(int i = 0;i < pTra->mcom;i++){
             Posicao pos = pTra->mCaminho[i];
             printf("%d, %d\n",pos.x,pos.y-1);

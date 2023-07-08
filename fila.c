@@ -59,7 +59,6 @@ Iten FilaDesenfileira ( Fila *pfila, Iten *pitem) {
 
     free(aux);
     return *pitem;
-    
 
 }
 
