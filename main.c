@@ -34,7 +34,9 @@ int main(){
             printf("%d, %d\n",saida->y,saida->x);
         }
     }else if(valida != 1){
-        
+        pLab->mapa[inicio->y][inicio->x] = 'M';
+        printf("%d\n ",pTra->mcom+1);
+        printLab(pLab);
         printf("EPIC FAIL\n");
     }
     
