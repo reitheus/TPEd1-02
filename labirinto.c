@@ -8,24 +8,20 @@ Labirinto* alocaLab(int L, int C){
     //função de alocação do labirinto com mensagem de erros em caso de erro    
     
     Labirinto* newlab = (Labirinto*)malloc(sizeof(Labirinto));
-    if (newlab == NULL)
-    {
+    if (newlab == NULL){
         printf("Memoria insuficiente.\n");
         exit(1);
     }
 
     newlab->mapa = (char**)malloc(L * sizeof(char*));
-    if (newlab->mapa == NULL)
-    {
+    if (newlab->mapa == NULL){
         printf("Memoria insuficiente.\n");
         exit(1);
     }
 
-    for (int i = 0; i < L; i++)
-    {
+    for (int i = 0; i < L; i++){
         newlab->mapa[i] = (char*)malloc(C * sizeof(char));
-        if (newlab->mapa[i] == NULL)
-        {
+        if (newlab->mapa[i] == NULL){
             printf("Memoria insuficiente.\n");
             exit(1);
         }
@@ -53,12 +49,9 @@ int verificavazio(Labirinto* pLab){
     //função de verificação da quantidade de espaços vazios
 
     int vazio = 0;
-    for (int i = 0; i < pLab->tamL; i++)
-    {
-        for (int j = 0; j < pLab->tamC; j++)
-        {
-            if (pLab->mapa[i][j] == ' ')
-            {
+    for (int i = 0; i < pLab->tamL; i++){
+        for (int j = 0; j < pLab->tamC; j++){
+            if (pLab->mapa[i][j] == ' '){
                 vazio += 1;
             }
         }
@@ -82,10 +75,8 @@ Labirinto* lelabirinto(char opcao){
 
     plab = alocaLab(L, C);
 
-    for (int i = 0; i < L; i++)
-    {
-        for (int j = 0; j < C; j++)
-        {
+    for (int i = 0; i < L; i++){
+        for (int j = 0; j < C; j++){
             scanf("%c", &(plab->mapa[i][j]));
         }
     }
@@ -97,10 +88,8 @@ Labirinto* lelabirinto(char opcao){
 void printLab(Labirinto* pLab){
     //função para imprimir o labirinto salvo
 
-    for (int i = 0; i < pLab->tamL; i++)
-    {
-        for (int j = 0; j < pLab->tamC; j++)
-        {
+    for (int i = 0; i < pLab->tamL; i++){
+        for (int j = 0; j < pLab->tamC; j++){
             printf("%c", pLab->mapa[i][j]);
         }
     }
@@ -138,14 +127,12 @@ int corrigiLab(Labirinto* pLab){
 int achaSaida(Labirinto* pLab, Posicao *saida, Posicao *mause, Percurso *pTra, int i,Posicao *inicio, int achou){
     //função recursiva
     
-
     if (valueY(mause) == valueY(saida) && valueX(mause) == valueX(saida)){
         
         if(i < pTra->mcom){
             pTra->mcom = i;
             for(int j=0;j <= pTra->mcom;j++){
-            	
-                pTra->mCaminho[j] = pTra->trajetos[j];
+            	pTra->mCaminho[j] = pTra->trajetos[j];
             	
             }
             
@@ -268,7 +255,6 @@ int achaSaidaPilha(Labirinto* pLab, Posicao *saida, Posicao *mause, Percurso *pT
         
         //inseri na pilha pPilhaCaminho a as coordenadas co caminho endo feito
         insertPilha(pPilhaCaminho, pPilha->item[pPilha->ultimo - 1]);
-        
 
         if(mause->x == saida->x && mause->y == saida->y){
             //printf("\nachou a saida\n");
@@ -300,7 +286,6 @@ int achaSaidaPilha(Labirinto* pLab, Posicao *saida, Posicao *mause, Percurso *pT
         pTra->mCaminho[i] = pTra->trajetos[i];
         i++;
     }
-
     pTra->mcom = i;
 
     //desaloca as pilhas utilizadas
@@ -321,6 +306,8 @@ int achaSaidaFila(Labirinto *pLab, Posicao *saida, Posicao *mause, Percurso *pTr
 
         casa = FilaDesenfileira(pFila, &casa);
         pLab->mapa[valueY(mause)][valueX(mause)] = 'o';
+
+        //verificação da saida
         if(casa.atual.x == saida->x && casa.atual.y == saida->y){
 
             casa.distancia++;
@@ -339,16 +326,15 @@ int achaSaidaFila(Labirinto *pLab, Posicao *saida, Posicao *mause, Percurso *pTr
             casa.distancia++;
             updatePos(mause,valueY(&casa.atual),valueX(&casa.atual));
             updateTra(pTra,casa.distancia,valueX(&casa.atual),valueY(&casa.atual));
-
-            
            
         }
+        
+        //inicio dos testes de posição
         if (valueX(mause) + 1 > 0 && valueX(mause) + 1 < pLab->tamC && pLab->mapa[valueY(mause)][valueX(mause) + 1] == ' '){
             //teste para direita
             casa.atual.x++;
             insereFila(pFila, &casa);
             casa.atual.x--;
-
             
         }
         
@@ -357,7 +343,6 @@ int achaSaidaFila(Labirinto *pLab, Posicao *saida, Posicao *mause, Percurso *pTr
             casa.atual.y++;
             insereFila(pFila, &casa);
             casa.atual.y--;
-
             
         }
 
@@ -366,7 +351,6 @@ int achaSaidaFila(Labirinto *pLab, Posicao *saida, Posicao *mause, Percurso *pTr
             casa.atual.x--;
             insereFila(pFila, &casa);
             casa.atual.x++;
-
             
         }
 
@@ -376,14 +360,10 @@ int achaSaidaFila(Labirinto *pLab, Posicao *saida, Posicao *mause, Percurso *pTr
             insereFila(pFila, &casa);
             casa.atual.y++;
 
-
-        }
-        
-
-        
-        
+        }       
     }
 
+    //atualição do vetor e do tamanho
     for (int i = 0; i <= casa.distancia; i++) {
         pTra->mCaminho[i] = pTra->trajetos[i];
     }
@@ -401,19 +381,19 @@ int escolheSaida(Labirinto* pLab, Posicao *saida, Posicao *mause, Percurso *pTra
     switch(pLab->op){
 
         case 'r':
-            printf("\nachou saida utilizando recursão\n");
+            printf("\nAcho saida utilizando recursão\n");
             valida = achaSaida(pLab, saida, mause,pTra,0, inicio, achou);
             break;
         case 'p':
-            printf("\nachou saida utilizando Pilha\n");
+            printf("\nAchou saida utilizando Pilha\n");
             valida = achaSaidaPilha(pLab, saida, mause,pTra,0,0);
             break;
         case  'f':
-            printf("\nacha saida por fila\n");
+            printf("\nAcha saida por fila\n");
             valida = achaSaidaFila(pLab, saida, mause, pTra,0);
             break;
         default:
-            printf("\nopção invalida\n");
+            printf("\nOpção invalida\n");
             break;
 
     }
@@ -447,9 +427,8 @@ Labirinto* imprimepercursoNolabirinto(Labirinto *plab,Percurso *pTra, Posicao *i
             Posicao pos = pTra->mCaminho[i];
             printf("%d, %d\n",pos.x,pos.y-1);
         }
-        
     }
-    
+
     return plab;
 }
 
