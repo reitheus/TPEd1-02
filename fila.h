@@ -16,7 +16,6 @@ typedef struct cel{
 typedef struct fila{
     Celula* cabeca;
     Celula* ultimo;
-    int tam;
 } Fila;
 
 Fila* iniciaFila (void ) ;
