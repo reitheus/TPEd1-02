@@ -7,7 +7,6 @@ Fila* iniciaFila(void){
     Fila *pFila = (Fila*)malloc(sizeof(Fila));
     pFila->ultimo = NULL;
     pFila->cabeca = NULL;
-    pFila->tam = 0;
     return pFila;
 
 }
@@ -38,7 +37,6 @@ void insereFila ( Fila *pfila ,Iten *pitem) {
             pfila->ultimo->prox = aux;
             pfila->ultimo = aux;
         }
-        pfila->tam++;
         pfila->ultimo = aux;
     }
 }
