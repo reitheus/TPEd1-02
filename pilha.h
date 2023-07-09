@@ -6,20 +6,20 @@
 #define INICIO 0
 #define TAM 1
 
-typedef struct{
+typedef struct pai{
     int y;
     int x;
 
 }Pai;
 
-typedef struct{
+typedef struct item{
     int y;
     int x;
     Pai pai;
 
 }Item;
 
-typedef struct {
+typedef struct pilha{
     int n;
     Item *item;
     int primeiro, ultimo;
