@@ -46,10 +46,11 @@ int main(){
         printf("%d\n ",pTra->mcom+1);
         printLab(pLab);
         printf("EPIC FAIL\n");
+        valida = -1;
     }
     pTra->mCaminho[pTra->mcom].y = saida->x+1;
     pTra->mCaminho[pTra->mcom++].x = saida->y;
-    interface(pLab, pTra, ani);
+    interface(pLab, pTra, ani, valida);
 
     //desalocação da memoria
     desalocaPos(&inicio);

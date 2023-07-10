@@ -46,15 +46,31 @@ void manipular_entrada(ALLEGRO_EVENT event, char *str){
     
 }
 
-void interface(Labirinto *pLab, Percurso* pTra, int k){
+void interface(Labirinto *pLab, Percurso* pTra, int k, int achou){
     int tam = 920;
+    int posLabX = 10, posLabY = 40;
     char texto[TAM];
+    char modo[TAM2];
     if(pLab->tamC < 25 || pLab->tamL < 25){
         tam = 480;
     }
 
     inicializar();
-        
+    
+
+    switch(pLab->op){
+        case 'r':
+             strcpy(modo, "Achou saida Utilizando Recursão");
+        break;
+        case 'p':
+             strcpy(modo, "Achou saida Utilizando Pilha");
+        break;
+        case 'f':
+             strcpy(modo, "Achou saida Utilizando Fila");
+        break;
+
+    }
+
     ALLEGRO_DISPLAY * display = al_create_display(tam,tam);
     al_set_window_position(display, 200, 200);
     al_set_window_title(display, "Labirinto");
@@ -70,52 +86,54 @@ void interface(Labirinto *pLab, Percurso* pTra, int k){
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
     al_start_timer(timer);
 
-    
-    while(true){
+    int saida = 0;
+    while(saida == 0){
     ALLEGRO_EVENT event;
-    al_wait_for_event(event_queue, &event);
-    manipular_entrada( event, texto);
-    if( event.type == ALLEGRO_EVENT_DISPLAY_CLOSE ){
-        printf("fechar");
-      break;
+    
+    while(!al_is_event_queue_empty(event_queue)){
+        al_wait_for_event(event_queue, &event);
+        if( event.type == ALLEGRO_EVENT_DISPLAY_CLOSE ){
+            printf("fechar");
+            saida = 1;
+            break;
+        }
     }
 
     al_clear_to_color(al_map_rgb(255,255,255));
-    al_draw_text(font, al_map_rgb(0, 0, 0), 10, 10, 0, "Labirinto Resovido!");
+    
     //ponteiro da imagem, posx, posy, flag 0;
 
     if(k == pTra->mcom){
         k = 0;
-        al_rest(1.0);
+        al_rest(0.5);
         //break;
 
     }
     
 
-    for(int i = 0; i < pLab->tamL ; i++){
-        for(int j = 0; j <  pLab->tamC; j++){
-            
-            if(pLab->mapa[i][j] == '*' || pLab->mapa[i][j] == '#'){
-                al_draw_bitmap(muro, j * 16 + 10,i * 16 + 25 , 0);
-            }else if(pLab->mapa[i][j] == 'o' || pLab->mapa[i][j] == '.'){
-                al_draw_bitmap(bola, j * 16 + 10,i * 16 + 25 , 0);
-            }else if(pLab->mapa[i][j] == 'm' || pLab->mapa[i][j] == 'M'){
-                //al_draw_bitmap(rato, pTra->mCaminho[k].y * 16 + 10, pTra->mCaminho[k].x * 16 + 25 , 0);
+    if(achou > 0){
+        al_draw_text(font, al_map_rgb(0, 0, 0), 10, 10, 0, "Labirinto Resovido!");//escreve na tela
+        al_draw_text(font, al_map_rgb(0, 0, 0), 10, 25, 0, modo);
 
+        for(int i = 0; i < pLab->tamL ; i++){
+            for(int j = 0; j <  pLab->tamC; j++){
+                
+                if(pLab->mapa[i][j] == '*' || pLab->mapa[i][j] == '#'){
+                    al_draw_bitmap(muro, j * 16 + posLabX,i * 16 + posLabY , 0);
+                }else if(pLab->mapa[i][j] == 'o' || pLab->mapa[i][j] == '.'){
+                    al_draw_bitmap(bola, j * 16 + posLabX,i * 16 + posLabY , 0);
+                }
+                
             }
             
-
         }
-        
+        al_draw_bitmap(rato, pTra->mCaminho[k].y * 16 + posLabX, pTra->mCaminho[k].x * 16 + posLabY , 0);
+        al_rest(0.15);
+        k++;
+    }else{
+        al_draw_text(font, al_map_rgb(0, 0, 0), 10, 15, 0, "EPIC FAIL");
+        al_draw_text(font, al_map_rgb(0, 0, 0), 10, 30, 0, "Labirinto sem Saída");
     }
-    if( event.type == ALLEGRO_EVENT_DISPLAY_CLOSE ){
-      break;
-    }
-    
-    al_draw_bitmap(rato, pTra->mCaminho[k].y * 16 + 10, pTra->mCaminho[k].x * 16 + 25 , 0);
-    
-    al_rest(0.15);
-    k++;
     
     // Segura a execução por 10 segundos
     // al_rest(0.1);
